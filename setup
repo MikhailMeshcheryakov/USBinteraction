@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mkdir /var/userinfo
+mv declogout ./var/userinfo
+mv declogin ./var/userinfo
+session-setup-script=/var/userinfo/declogin
+session-cleanup-script=/var/userinfo/declogout
+chmod 700 /var/userinfo/declogin
+chmod 700 /var/userinfo/declogout

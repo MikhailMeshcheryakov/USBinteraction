@@ -1,10 +1,13 @@
 #!/bin/bash
 
-mkdir /var/userinfo
-mv declogout ./var/userinfo
-mv declogin ./var/userinfo
-session-setup-script=/var/userinfo/declogin
-session-cleanup-script=/var/userinfo/declogout
-chmod 700 /var/userinfo/declogin
-chmod 700 /var/userinfo/declogout
-./ldb
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+else
+	mkdir /var/userinfo
+	mv declogout /var/userinfo
+	mv declogin /var/userinfo
+	session-setup-script=/var/userinfo/declogin
+	session-cleanup-script=/var/userinfo/declogout
+	./initdb
+fi

@@ -2,6 +2,7 @@
 =======
 
 For <b> Effits </b> ltd. needs
+---
 Prepare for LightDM
 
 ------

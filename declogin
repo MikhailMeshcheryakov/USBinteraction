@@ -1,17 +1,58 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-import sqlite3;
-import os;
+import sqlite3
+from os import environ
+import string
+import sys
+from subprocess import Popen
+#Use ENV $USER & $NUM
+disp = os.environ['NUM']
+usr = os.environ['USER']
 
-сonn = sqlite3.connect('/tmp/leftpart')
-  c = conn.cursor()
+#check to $USER & $NUM contains only symbols from specified range
+usrCheck = string.letters + string.digits + '_' + '-' + '.'
+dispCheck = string.digits
 
-#insert NUM info to table
-disp = os.environ["$NUM"]
-  cur.execute("INSERT INTO leftpart(Display) VALUES %s" % disp)
+def check_ins(usr, disp):
+    return all(c in usrCheck for c in usr)
+    return all(c in dispCheck for c in disp)
+if not check_ins(usr, disp):
+	    print('Error. System will exit with code 0')
+        sys.exit(0)
+if check_ins(usr, disp):
+                #check for connected to database
+                    try:
+                        #connected to initial database
+                        conn = sqlite3.connect('initdb')
+                        c = conn.cursor()
 
-# insert USER info to table
-usr = os.environ["$USER"]
-  cur.execute("INSERT INTO leftpart(USER) VALUES %s" % usr)
+                        #insert NUM and USER info to table
+                        c.execute( "INSERT INTO recogtable(Display) VALUES %s" % disp)
+                        c.execute( "INSERT INTO recogtable(User) VALUES %s" % usr)
 
-conn.close()
+                        #looking for mounted devices
+                        #c.execute("SELECT mountP FROM mountable WHERE PID=NULL and Display=disp", {"disp":disp})
+                        #mountP = data
+                        #r = Popen(['./usb-connector.py', data, addr[0]])
+                        conn.commit()
+                    except sqlite3.OperationalError:
+                        print ('Error. System will exit with code 2')
+                        sys.exit(2)
+                        conn.close()
+                    except sqlite3.DatabaseError:
+                        print ('Error. System will exit with code 3')
+                        sys.exit(3)
+                        conn.close()
+                    except sqlite3.Error:
+                        print ('Error. System will exit with code 1 ')
+                        sys.exit(1)
+                        conn.close()
+                    finally:
+
+                        if conn:
+                                conn.close()
+                        if not conn: 
+                                print ('Connect interruped. System will exit with code 20')
+                                sys.exit(10)
+                                conn.close()

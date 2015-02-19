@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+import sqlite3
+
+conn = sqlite3.connect('initdb')
+c = conn.cursor()
+c.execute (''' create table recogtable ( Display int , User text) ''')
+c.execute(''' create table mountable ( Display int , MountP text , PID int) ''')
+conn.commit()
+conn.close

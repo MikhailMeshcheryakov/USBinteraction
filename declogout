@@ -1,17 +1,49 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-import sqlite3;
-import os;
+import sqlite3
+from os import environ
+import re
+import sys
+#Use ENV $USER & $NUM
+disp = environ['NUM']
+usr = environ['USER']
 
-  сonn = sqlite3.connect('/tmp/leftpart')
-    c = conn.cursor()
+#check to $USER & $NUM contains only symbols from specified range
+usrCheck = string.letters + string.digits + '_' + '-' + '.'
+dispCheck = string.digits
 
-# delete NUM info from table
-disp = os.environ["$NUM"]
-  cur.execute("DELETE FROM leftpart(Display) WHERE disp")
+def check_ins(usr, disp):
+    return all(c in usrCheck for c in usr)
+    return all(c in dispCheck for c in disp)
+if not check_ins(usr, disp):
+	    print('Error. System will exit with code 0')
+        sys.exit(90)
+if check_ins(usr, disp):
+		try:
+			conn = sqlite3.connect('initdb')
+			c = conn.cursor()
+			# delete NUM & USER info from table
+			c.execute("DELETE FROM recogtable(Display) WHERE disp", {"disp":disp})
+			c.execute("DELETE FROM recogtable(USER) WHERE usr", {"usr":usr})
+			conn.commit()
+        except sqlite3.OperationalError:
+            print ('Error. System will exit with code 12')
+            sys.exit(12)
+            conn.close()
+        except sqlite3.DatabaseError:
+            print ('Error. System will exit with code 13')
+            sys.exit(13)
+            conn.close()
+        except sqlite3.Error:
+            print ('Error. System will exit with code 11 ')
+            sys.exit(11)
+            conn.close()
+		finally:
 
-# delete USER info from table
-usr = os.environ["$USER"]
-  cur.execute("DELETE FROM leftpart(USER) WHERE usr")
-
-conn.close()
+			if conn:
+				conn.close()
+			if not conn: 
+				print ('Connect interruped. System will exit with code 100')
+				sys.exit(100)
+				conn.close()

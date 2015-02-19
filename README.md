@@ -12,7 +12,7 @@ Use that commands to install this software remote:
 ```
     $ mkdir usb-server
     $ cd usb-server
-    $ git clone /var/git/usb-server.git
+    $ git clone https://github.com/MikhailMeshcheryakov/usb-server.git
     $ ./install
 ```
 or just use one command if you have this pack physically:

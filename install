@@ -5,8 +5,8 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 else
 	mkdir /var/userinfo
-	mv declogout /var/userinfo
-	mv declogin /var/userinfo
+	mv logout /var/userinfo
+	mv login /var/userinfo
 	session-setup-script=/var/userinfo/declogin
 	session-cleanup-script=/var/userinfo/declogout
 	./initdb
